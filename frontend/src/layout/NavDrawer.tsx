@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Drawer, IconButton, List, ListItemButton, Stack, Typography } from "@mui/material";
 import { IconMenu2 } from "@tabler/icons-react";
-import SingInButton from "../buttons/SignInButton";
 import { navItems } from "./navItems";
 import { NavLink } from "react-router-dom";
 
@@ -44,9 +43,24 @@ export const NavDrawer = (
               {item.label}
             </ListItemButton>
           })}
+          <Divider sx={{ my: 3 }} />
+          <ListItemButton
+            onClick={onLogout}
+            sx={{
+              color: "#803030 !important",
+              borderRadius: 0,
+              textTransform: "none",
+              fontWeight: 700,
+              px: 2,
+              "&:hover": { color: "#801010 !important" }
+            }}
+          >
+            Sign out
+          </ListItemButton>
         </List>
 
-      </Drawer>
+
+      </Drawer >
     </>
   )
 }

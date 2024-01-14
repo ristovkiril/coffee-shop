@@ -63,7 +63,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 textTransform: "none",
                 px: 2,
                 ml: "auto",
-                display: { xs: !isAdmin ? "none" : "block", sm: "block" },
+                display: { xs: isAdmin ? "none" : "block", sm: "block" },
                 "&:hover": { bgcolor: "#801010", color: "#f1f1f1 !important" }
               }}
             >
@@ -78,7 +78,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 textTransform: "none",
                 px: 2,
                 ml: "auto",
-                display: { xs: !isAdmin ? "none" : "block", sm: "block" },
+                display: { xs: isAdmin ? "none" : "block", sm: "block" },
                 "&:hover": { bgcolor: "#801010", color: "#f1f1f1 !important" }
               }}
             >
