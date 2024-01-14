@@ -1,10 +1,12 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { IconEye, IconEyeClosed } from "@tabler/icons-react";
 
 export const RegisterPage = () => {
   const { onRegister } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,10 +53,18 @@ export const RegisterPage = () => {
           placeholder="Email"
         />
         <TextField
-          type="password"
+          type={showPassword ? "text" : "password"}
           size="small"
           fullWidth
+          value={password}
           onChange={e => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">
+              <IconButton size="small" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <IconEye /> : <IconEyeClosed />}
+              </IconButton>
+            </InputAdornment>
+          }}
           sx={{ my: 1 }}
           placeholder="Password"
         />
