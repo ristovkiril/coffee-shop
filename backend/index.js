@@ -22,7 +22,6 @@ app.get(`/`, (req, res) => {
   res.status(200).send("Welcome to Coffee shop app")
 })
 
-console.log(DB_URI);
 mongoose.connect(DB_URI)
   .then(() => {
     console.log("Connectted to db");
