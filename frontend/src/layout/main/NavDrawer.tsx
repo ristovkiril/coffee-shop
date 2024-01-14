@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Box, Button, Divider, Drawer, IconButton, List, ListItemButton, Stack, Typography } from "@mui/material";
 import { IconMenu2 } from "@tabler/icons-react";
-import { navItems } from "./navItems";
+import { navItems } from "../navItems";
 import { NavLink } from "react-router-dom";
 
 export const NavDrawer = (

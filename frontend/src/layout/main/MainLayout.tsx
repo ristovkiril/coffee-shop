@@ -1,10 +1,10 @@
-import { Button, Drawer, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { Button, Container, Drawer, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { IconMenu2 } from "@tabler/icons-react";
 import { NavDrawer } from "./NavDrawer";
-import { navItems } from "./navItems"
+import { navItems } from "../navItems"
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { currentUser, onLogout } = useAuth();
@@ -89,7 +89,9 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
       </Toolbar>
 
-      {children}
+      <Container>
+        {children}
+      </Container>
     </>
   )
 }

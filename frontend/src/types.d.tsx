@@ -4,3 +4,10 @@ type User = {
   email: string,
   role: string,
 }
+
+type Ingredient = {
+  id: string,
+  name: string,
+  description: string,
+  createdAt: Date
+}
