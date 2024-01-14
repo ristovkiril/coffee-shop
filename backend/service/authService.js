@@ -23,6 +23,7 @@ export const login = async (email, password) => {
 
   const token = jwt.sign(
     {
+      id: user.id,
       name: user.name,
       email: user.email,
       role: user.role
@@ -30,7 +31,7 @@ export const login = async (email, password) => {
     process.env.SECRET
   )
 
-  return { token: token, user: { name: user.name, email: user.email, role: user.role } }
+  return { token: token, user: { id: user.id, name: user.name, email: user.email, role: user.role } }
 }
 
 export const register = async (name, email, password) => {

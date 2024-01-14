@@ -7,6 +7,7 @@ import authMiddleware from "./middlewares/authMiddleware.js";
 import "punycode"
 
 import authRoutes from "./routes/authRoutes.js";
+import ingredientRoutes from "./routes/ingredientRoutes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(logMiddleware)
 app.use(authMiddleware)
 
 app.use("/api/user", authRoutes)
+app.use("/api/ingredient", ingredientRoutes)
 
 app.get(`/`, (req, res) => {
 
