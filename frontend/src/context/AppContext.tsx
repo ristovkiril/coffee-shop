@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { LoadingScreen } from "../components/loading-screen/LoadingScreen";
-import axios, { AUTH_TOKEN } from "../config/axios";
+import axios from "../config/axios";
 
 type AppContextType = {
   ingredients: Ingredient[];
