@@ -1,7 +1,6 @@
 import './App.css'
 import { useAuth } from './context/AuthContext'
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { MainLayout } from './layout/main/MainLayout';
 import { LoginPage } from './pages/login/LoginPage';
 import { RegisterPage } from './pages/register/RegisterPage';
 import { IngredientsPage } from './pages/ingredients/IngredientsPage';
