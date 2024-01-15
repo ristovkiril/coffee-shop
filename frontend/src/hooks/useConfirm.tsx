@@ -7,7 +7,7 @@ import { ReactNode, useState } from 'react';
 const useConfirm = (title: string, message: string): [ReactNode, () => Promise<boolean>] => {
   const [promise, setPromise] = useState<{ resolve: (value: boolean) => void } | null>(null);
 
-  const confirm = () => new Promise<boolean>((resolve, reject) => {
+  const confirm = () => new Promise<boolean>((resolve) => {
     setPromise({ resolve });
   });
 

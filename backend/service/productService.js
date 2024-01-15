@@ -17,7 +17,7 @@ export const findAll = async () => {
   return products;
 }
 
-export const create = async (name, description, price, ingredients) => {
+export const create = async (name, description, price, ingredients, user) => {
   if (!name || !description || !price || !ingredients || ingredients.length === 0) {
     throw new Error("Name, description, price and ingredients are required fields");
   }
@@ -28,6 +28,7 @@ export const create = async (name, description, price, ingredients) => {
     name,
     description,
     price,
+    owner: user?.id || null,
     ingredients: mappedIngredients
   })
 

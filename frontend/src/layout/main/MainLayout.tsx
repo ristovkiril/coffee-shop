@@ -1,4 +1,4 @@
-import { Button, Container, Drawer, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { Button, Container, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -9,7 +9,6 @@ import { navItems } from "../navItems"
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { currentUser, onLogout } = useAuth();
   const [openDrawer, setOpenDrawer] = useState(false);
-  console.log(currentUser);
 
   const navButtons = navItems?.map(item => <Button
     key={item.pathname}

@@ -5,6 +5,7 @@ import { MainLayout } from './layout/main/MainLayout';
 import { LoginPage } from './pages/login/LoginPage';
 import { RegisterPage } from './pages/register/RegisterPage';
 import { IngredientsPage } from './pages/ingredients/IngredientsPage';
+import { DefaultProductsPage } from './pages/default-products/DefaultProductsPage';
 
 function App() {
   const { isAuth } = useAuth();
@@ -17,7 +18,7 @@ function App() {
           isAuth ?
             <>
               <Route path="/ingredients" index element={<IngredientsPage />} />
-              <Route path="/default-products" index element={<MainLayout>Default Products</MainLayout>} />
+              <Route path="/default-products" index element={<DefaultProductsPage />} />
               <Route path="*" element={<Navigate to="/" />} />
 
             </> :

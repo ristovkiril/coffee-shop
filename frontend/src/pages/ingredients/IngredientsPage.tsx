@@ -6,6 +6,7 @@ import { Box, Button, IconButton, Table, TableBody, TableCell, TableHead, TableR
 import moment from "moment";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import useConfirm from "../../hooks/useConfirm";
+import { CreateIngredientModal } from "./CreateIngredientModal";
 
 export const IngredientsPage = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -17,22 +18,35 @@ export const IngredientsPage = () => {
   );
 
   useEffect(() => {
+    fetchData();
+  }, [])
+
+  const fetchData = () => {
     axios.get("/api/ingredient")
       .then(response => setIngredients(response.data))
       .catch(error => toast.error(error.message));
-  }, [])
+  }
 
   const onDelete = async (id: string) => {
     const response = await confirm();
-    if (response && selectedIngredient) {
-      axios.delete(`/api/ingredient?${id}`)
+    if (response) {
+      await axios.delete(`/api/ingredient/${id}`);
+      fetchData();
     }
   }
 
-  console.log(ingredients);
   return (
     <AdminLayout>
       {ConfirmationDialog}
+      <CreateIngredientModal
+        open={openModal}
+        handleClose={() => {
+          setOpenModal(false);
+          setSelectedIngredient(null);
+        }}
+        handleSave={() => fetchData()}
+        selectedIngredient={selectedIngredient}
+      />
 
       <Box sx={{ p: 2, bgcolor: "#FFF", borderRadius: 3, my: 3 }}>
         <Button
@@ -40,7 +54,10 @@ export const IngredientsPage = () => {
           color={"primary"}
           startIcon={<IconPlus size={18} />}
           sx={{ textTransform: "none" }}
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            setOpenModal(true);
+            setSelectedIngredient(null);
+          }}
         >
           Add Ingredient
         </Button>

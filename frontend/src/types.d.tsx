@@ -11,3 +11,14 @@ type Ingredient = {
   description: string,
   createdAt: Date
 }
+
+type Product = {
+  id: string,
+  owned: null | string,
+  name: string,
+  description: string,
+  price: number,
+  ingredients: [
+    { id: string, name: string, description: string, value: number, min: number, max: number }
+  ]
+}

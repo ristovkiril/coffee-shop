@@ -26,10 +26,26 @@ router.get("/:id", async (req, res) => {
   }
 })
 
+router.post("/default", async (req, res) => {
+  try {
+    const { name, description, price, ingredients } = req.body;
+    if (req.user === null || req.user.role !== "admin") {
+      return res.status(500).json({ message: "User has no permission to create default products" })
+    }
+    const product = await create(name, description, price, ingredients, null);
+
+    return res.status(200).json(product);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ message: err.message })
+  }
+})
+
+
 router.post("/", async (req, res) => {
   try {
     const { name, description, price, ingredients } = req.body;
-    const product = await create(name, description, price, ingredients);
+    const product = await create(name, description, price, ingredients, req.user);
 
     return res.status(200).json(product);
   } catch (err) {
