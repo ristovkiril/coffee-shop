@@ -13,12 +13,19 @@ type Ingredient = {
 }
 
 type Product = {
-  id: string,
-  owned: null | string,
+  id: null | string,
+  owner: null | string,
   name: string,
   description: string,
   price: number,
-  ingredients: [
-    { id: string, name: string, description: string, value: number, min: number, max: number }
-  ]
+  ingredients: ProductIngredient[]
+}
+
+type ProductIngredient = {
+  id: string,
+  name: string,
+  description: string,
+  value: number,
+  min: number,
+  max: number
 }

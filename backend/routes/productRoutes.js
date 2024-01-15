@@ -3,9 +3,24 @@ import { findById, findAll, create, update, deleteById } from "../service/produc
 
 const router = express.Router();
 
+router.get("/default", async (req, res) => {
+  try {
+    console.log("Fetch default")
+    const products = await findAll(null);
+
+    return res.status(200).json(products);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ message: err.message })
+  }
+})
+
 router.get("/", async (req, res) => {
   try {
-    const products = await findAll();
+    if (req.user === null || !req.user.id) {
+      return res.status(500).json({ message: "User has no permission to get default products" })
+    }
+    const products = await findAll(req.user.id);
 
     return res.status(200).json(products);
   } catch (err) {

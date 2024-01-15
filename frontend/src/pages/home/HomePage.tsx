@@ -8,9 +8,14 @@ import { IconCircle, IconCircle0Filled, IconCircleFilled, IconPencil, IconPlus, 
 import useConfirm from "../../hooks/useConfirm";
 import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { CreateCustomProductModal } from "../../components/products/CreateCustomProductModal";
 // import { CreateIngredientModal } from "./CreateIngredientModal";
 
-export const DefaultProductsPage = () => {
+export const HomePage = () => {
+  const { isAuth } = useAuth();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -24,9 +29,17 @@ export const DefaultProductsPage = () => {
   }, [])
 
   const fetchData = () => {
-    axios.get("/api/product/default")
+    axios.get("/api/product")
       .then(response => setProducts(response.data))
       .catch(error => toast.error(error.message));
+  }
+
+  const onDelete = async (id: string) => {
+    const response = await confirm();
+    if (response) {
+      await axios.delete(`/api/product/${id}`);
+      fetchData();
+    }
   }
 
   const onSave = (product: Product) => {
@@ -40,7 +53,7 @@ export const DefaultProductsPage = () => {
         })
         .catch(error => toast.error(error?.message || "Failed to update product"))
     } else {
-      axios.post(`/api/product/default`, { ...product })
+      axios.post(`/api/product`, { ...product })
         .then(() => {
           toast.success("Successfully created product");
           setOpenModal(false);
@@ -54,8 +67,16 @@ export const DefaultProductsPage = () => {
   return (
     <AdminLayout>
       {ConfirmationDialog}
+      <CreateCustomProductModal
+        open={openModal && selectedProduct === null}
+        handleClose={() => setOpenModal(false)}
+        handleSave={(product: Product) => {
+          setSelectedProduct({ ...product });
+          setOpenModal(true);
+        }}
+      />
       <CreateProductModal
-        open={openModal}
+        open={openModal && !!selectedProduct}
         handleClose={() => {
           setOpenModal(false);
           setSelectedProduct(null);
@@ -71,11 +92,15 @@ export const DefaultProductsPage = () => {
           startIcon={<IconPlus size={18} />}
           sx={{ textTransform: "none" }}
           onClick={() => {
+            if (!isAuth) {
+              navigate("/login");
+              return;
+            }
             setOpenModal(true);
             setSelectedProduct(null);
           }}
         >
-          Add Product
+          Add Favorite Coffee
         </Button>
         <ProductsList
           products={products}

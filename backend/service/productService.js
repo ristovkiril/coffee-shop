@@ -9,8 +9,8 @@ export const findById = async (id) => {
   return product;
 }
 
-export const findAll = async () => {
-  const products = await Product.find({});
+export const findAll = async (owner) => {
+  const products = await Product.find({ owner: owner });
   if (!products) {
     throw new Error("Product not found");
   }
