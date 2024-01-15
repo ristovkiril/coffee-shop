@@ -1,8 +1,8 @@
-import { Button, Fade, FormControl, InputLabel, MenuItem, Modal, Rating, Select, Stack, TextField, Typography } from "@mui/material"
-import axios from "../../config/axios";
+import { Button, Fade, FormControl, IconButton, InputLabel, MenuItem, Modal, Rating, Select, Stack, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { IconCircle, IconCircleFilled } from "@tabler/icons-react";
+import { IconCircle, IconCircleFilled, IconX } from "@tabler/icons-react";
+import { useAppContext } from "../../context/AppContext";
 
 
 const style = {
@@ -28,13 +28,7 @@ export const CreateProductModal = (
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [selectedIngredients, setSelectedIngredients] = useState<ProductIngredient[]>([]);
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-
-  useEffect(() => {
-    axios.get("/api/ingredient")
-      .then(response => setIngredients(response.data))
-      .catch(error => toast.error(error.message));
-  }, [])
+  const { ingredients } = useAppContext();
 
   useEffect(() => {
     if (open) {
@@ -62,6 +56,12 @@ export const CreateProductModal = (
     }
     handleSave({ id: null, owner: null, name, description, price, ingredients: selectedIngredients })
 
+  }
+
+  const removeIngredient = (id: string) => {
+    setSelectedIngredients(prev => {
+      return prev.filter(i => i.id !== id);
+    })
   }
 
   const remainedIngredients = ingredients?.filter(i1 => !selectedIngredients?.find(i2 => i2.id === i1.id));
@@ -123,8 +123,11 @@ export const CreateProductModal = (
             const ingredient = ingredients?.find(i => i.id === productIngredient.id);
             if (!ingredient) return null;
             return (
-              <Stack key={productIngredient.id} direction={"row"} justifyContent={"space-between"} gap={1}>
-                <Typography>{productIngredient.name}</Typography>
+              <Stack key={productIngredient.id} direction={"row"} alignItems="center" gap={1}>
+                <IconButton onClick={() => removeIngredient(productIngredient.id)}>
+                  <IconX size={18} />
+                </IconButton>
+                <Typography sx={{ flex: 1 }} fontWeight={600}>{productIngredient.name}</Typography>
                 <Rating
                   value={productIngredient?.value}
                   max={ingredient?.max}

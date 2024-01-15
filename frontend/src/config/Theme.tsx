@@ -16,34 +16,29 @@ export const theme =
       },
     },
     typography: {
-      fontFamily: "'Inter', sans-serif",
       h1: {
-        fontFamily: "Inter",
-        fontSize: '2.8rem'
-      },
-      h2: {
-        fontFamily: "Inter",
         fontSize: '2.2rem'
       },
+      h2: {
+        fontSize: '2rem'
+      },
       h3: {
-        fontFamily: "Inter",
-        fontSize: '1.5rem'
+        fontSize: '1.8rem'
       },
       h4: {
-        fontFamily: "Inter",
-        fontSize: '1.2rem'
+        fontSize: '1.6rem'
       },
       h5: {
-        fontFamily: "Inter",
-        fontSize: '1rem'
+        fontSize: '1.4rem'
+      },
+      h6: {
+        fontSize: '1.2rem'
       },
       body1: {
-        fontFamily: "Inter",
         fontSize: '0.9rem'
       },
       button: {
         textTransform: "none"
       }
-
     },
   })

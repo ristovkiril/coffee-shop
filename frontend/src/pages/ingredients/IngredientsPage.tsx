@@ -7,9 +7,10 @@ import moment from "moment";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import useConfirm from "../../hooks/useConfirm";
 import { CreateIngredientModal } from "./CreateIngredientModal";
+import { useAppContext } from "../../context/AppContext";
 
 export const IngredientsPage = () => {
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const { ingredients, fetchIngredients } = useAppContext();
   const [selectedIngredient, setSelectedIngredient] = useState<null | Ingredient>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [ConfirmationDialog, confirm] = useConfirm(
@@ -18,20 +19,14 @@ export const IngredientsPage = () => {
   );
 
   useEffect(() => {
-    fetchData();
+    fetchIngredients();
   }, [])
-
-  const fetchData = () => {
-    axios.get("/api/ingredient")
-      .then(response => setIngredients(response.data))
-      .catch(error => toast.error(error.message));
-  }
 
   const onDelete = async (id: string) => {
     const response = await confirm();
     if (response) {
       await axios.delete(`/api/ingredient/${id}`);
-      fetchData();
+      fetchIngredients();
     }
   }
 
@@ -44,7 +39,7 @@ export const IngredientsPage = () => {
           setOpenModal(false);
           setSelectedIngredient(null);
         }}
-        handleSave={() => fetchData()}
+        handleSave={() => fetchIngredients()}
         selectedIngredient={selectedIngredient}
       />
 

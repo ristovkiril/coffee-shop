@@ -1,8 +1,9 @@
-import { Button, Fade, Grid, IconButton, Modal, Rating, Stack, Typography } from "@mui/material"
+import { Fade, Grid, IconButton, Modal, Rating, Stack, Typography } from "@mui/material"
 import axios from "../../config/axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { IconCircle, IconCircleFilled, IconPencil, IconPlus } from "@tabler/icons-react";
+import { IconCircle, IconCircleFilled, IconPlus } from "@tabler/icons-react";
+import { useAppContext } from "../../context/AppContext";
 
 const style = {
   position: 'absolute',
@@ -24,6 +25,7 @@ export const CreateCustomProductModal = (
   { open, handleClose, handleSave }:
     { open: boolean, handleClose: () => void, handleSave: (product: Product) => void }) => {
   const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
+  const { ingredients } = useAppContext();
 
   useEffect(() => {
     axios.get("/api/product/default")
@@ -49,51 +51,52 @@ export const CreateCustomProductModal = (
       <Fade in={open} timeout={500}>
         <Stack direction={"column"} gap={2} sx={style}>
           <Typography variant="h3" color="primary">Choose coffee</Typography>
-          <Grid container sx={{ maxHeight: '100%', flex: 1 }}>
-            <Grid item xs={12} sm={6}>
-              <Stack direction="column" justifyContent={"center"} alignItems={"center"}
-                sx={{ border: 1, borderColor: "divider", borderRadius: 3, p: 5, m: 1 }}
-              >
-                <IconButton onClick={() => onSave(null)}>
-                  <IconPlus />
-                </IconButton>
-                <Typography>Customize your own coffee</Typography>
-              </Stack>
+          <Grid container sx={{ maxHeight: '100%', flex: 1 }} gap={1}>
+            <Grid item component={Stack}
+              xs={12} sm={5.9}
+              direction="column"
+              alignItems={"center"}
+              justifyContent={"center"}
+              onClick={() => onSave(null)}
+              sx={{ border: 1, borderColor: "divider", borderRadius: 3, p: 5, cursor: "pointer" }}
+            >
+              <IconPlus />
+              <Typography>Customize your own coffee</Typography>
             </Grid>
             {
               defaultProducts?.map((product) => {
                 return (
-                  <Grid item key={product.id}
-                    xs={12} sm={6}
+                  <Grid item key={product.id} component={Stack}
+                    xs={12} sm={5.9}
+                    direction="column"
+                    gap={1}
+                    onClick={() => onSave(product)}
+                    sx={{ border: 1, borderColor: "divider", borderRadius: 3, p: 2, cursor: "pointer" }}
                   >
-                    <Stack
-                      direction="column" gap={1}
-                      onClick={() => onSave(product)}
-                      sx={{ border: 1, borderColor: "divider", borderRadius: 3, p: 2, m: 1, cursor: "pointer" }}
-                    >
-                      <Typography variant="h4" color="primary">{product?.name}</Typography>
-                      <Typography>{product?.description}</Typography>
-                      {product?.ingredients?.map(ingredient => (
-                        <Stack key={ingredient.id} direction="row" alignItems="center" justifyContent={"space-between"}>
-                          <Typography>{ingredient?.name}</Typography>
+                    <Typography variant="h6" fontWeight={600} color="primary">{product?.name}</Typography>
+                    <Typography>{product?.description}</Typography>
+                    {product?.ingredients?.map(productIngredient => {
+                      const ingredient = ingredients?.find(i => i.id === productIngredient.id);
+                      if (!ingredient) return null;
+
+                      return (
+                        <Stack key={productIngredient.id} direction="row" alignItems="center" justifyContent={"space-between"}>
+                          <Typography>{productIngredient?.name}</Typography>
                           <Rating
-                            value={ingredient?.value}
+                            value={productIngredient?.value}
                             max={ingredient?.max}
                             sx={{ '& .MuiRating-iconFilled': { color: "#803030" } }}
                             icon={<IconCircleFilled color="#803030" />}
                             emptyIcon={<IconCircle color="#801010" />}
                           />
                         </Stack>
-                      ))}
-                    </Stack>
+                      )
+                    })}
                   </Grid>
                 )
               })
             }
-
-
           </Grid>
-
         </Stack>
       </Fade>
     </Modal>
