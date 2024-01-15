@@ -35,9 +35,16 @@ export const create = async (name, description, price, ingredients, user) => {
   return product;
 }
 
-export const update = async (id, name, description, price, ingredients) => {
+export const update = async (id, name, description, price, ingredients, user) => {
   if (!id || !name || !description || !price || !ingredients || ingredients.length === 0) {
     throw new Error("Name, description, price and ingredients are required fields");
+  }
+  const productDb = await Product.findById(id);
+  if (productDb.owner === null && user.role !== "admin") {
+    throw new Error("Forbidden - You do not have the necessary permissions");
+  }
+  if (productDb.owner !== null && productDb.owner.toString() !== user.id) {
+    throw new Error("Forbidden - You do not have the necessary permissions");
   }
 
   const mappedIngredients = await mapIngredients(ingredients);
@@ -52,9 +59,19 @@ export const update = async (id, name, description, price, ingredients) => {
   return { ...product, name, description, price, ingredients };
 }
 
-export const deleteById = async (id) => {
+export const deleteById = async (id, user) => {
   if (!id) {
     throw new Error("Id is required");
+  }
+  const productDb = await Product.findById(id);
+  if (!productDb) {
+    throw new Error("Product not found");
+  }
+  if (productDb.owner === null && user.role !== "admin") {
+    throw new Error("Forbidden - You do not have the necessary permissions");
+  }
+  if (productDb.owner !== null && productDb.owner.toString() !== user.id) {
+    throw new Error("Forbidden - You do not have the necessary permissions");
   }
   await Product.findByIdAndDelete(id);
 }

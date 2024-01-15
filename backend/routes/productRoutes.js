@@ -1,5 +1,6 @@
 import express from "express";
 import { findById, findAll, create, update, deleteById } from "../service/productService.js";
+import adminMiddleware from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
 
@@ -17,9 +18,6 @@ router.get("/default", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    if (req.user === null || !req.user.id) {
-      return res.status(500).json({ message: "User has no permission to get default products" })
-    }
     const products = await findAll(req.user.id);
 
     return res.status(200).json(products);
@@ -41,12 +39,9 @@ router.get("/:id", async (req, res) => {
   }
 })
 
-router.post("/default", async (req, res) => {
+router.post("/default", adminMiddleware, async (req, res) => {
   try {
     const { name, description, price, ingredients } = req.body;
-    if (req.user === null || req.user.role !== "admin") {
-      return res.status(500).json({ message: "User has no permission to create default products" })
-    }
     const product = await create(name, description, price, ingredients, null);
 
     return res.status(200).json(product);
@@ -73,7 +68,7 @@ router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const { name, description, price, ingredients } = req.body;
-    const product = await update(id, name, description, price, ingredients);
+    const product = await update(id, name, description, price, ingredients, req.user);
 
     return res.status(200).json(product);
   } catch (err) {
@@ -86,7 +81,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
-    await deleteById(id);
+    await deleteById(id, req.user);
 
     return res.status(200).json({ message: "Product deleted succussfully" });
   } catch (err) {

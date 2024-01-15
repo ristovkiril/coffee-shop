@@ -24,9 +24,8 @@ export const HomePage = () => {
   const fetchData = () => {
     axios.get("/api/product")
       .then(response => setProducts(response.data))
-      .catch(error => {
+      .catch(() => {
         setProducts([]);
-        // toast.error(error.message);
       });
   }
 

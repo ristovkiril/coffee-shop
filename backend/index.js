@@ -3,7 +3,8 @@ import { PORT, DB_URI } from "./configs/global.config.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import logMiddleware from "./middlewares/logMiddleware.js";
-import authMiddleware from "./middlewares/authMiddleware.js";
+import verifyTokenMiddleware from "./middlewares/verifyTokenMiddleware.js";
+import authenticateUser from "./middlewares/authenticateUser.js";
 import "punycode"
 
 import authRoutes from "./routes/authRoutes.js";
@@ -15,11 +16,11 @@ const app = express();
 app.use(cors("*"))
 app.use(express.json())
 app.use(logMiddleware)
-app.use(authMiddleware)
+app.use(verifyTokenMiddleware)
 
 app.use("/api/user", authRoutes)
 app.use("/api/ingredient", ingredientRoutes)
-app.use("/api/product", productRoutes)
+app.use("/api/product", authenticateUser, productRoutes)
 
 app.get(`/`, (req, res) => {
 
