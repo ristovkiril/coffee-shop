@@ -9,6 +9,8 @@ type Ingredient = {
   id: string,
   name: string,
   description: string,
+  min: number,
+  max: number,
   createdAt: Date
 }
 
@@ -26,6 +28,4 @@ type ProductIngredient = {
   name: string,
   description: string,
   value: number,
-  min: number,
-  max: number
 }

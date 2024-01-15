@@ -85,7 +85,7 @@ export const HomePage = () => {
         selectedProduct={selectedProduct}
       />
 
-      <Box sx={{ p: 2, bgcolor: "#FFF", borderRadius: 3, my: 3 }}>
+      <Box sx={{ p: 2, borderRadius: 3, my: 3 }}>
         <Button
           variant="contained"
           color={"primary"}

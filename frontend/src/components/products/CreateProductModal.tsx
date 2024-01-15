@@ -1,7 +1,8 @@
-import { Button, Fade, FormControl, InputLabel, MenuItem, Modal, Select, Stack, TextField, Typography } from "@mui/material"
+import { Button, Fade, FormControl, InputLabel, MenuItem, Modal, Rating, Select, Stack, TextField, Typography } from "@mui/material"
 import axios from "../../config/axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { IconCircle, IconCircleFilled } from "@tabler/icons-react";
 
 
 const style = {
@@ -74,7 +75,7 @@ export const CreateProductModal = (
     >
       <Fade in={open} timeout={500}>
         <Stack direction={"column"} gap={2} sx={style}>
-          <Typography variant="h2" color="primary">{selectedProduct ? "Update" : "Create"} Product</Typography>
+          <Typography variant="h2" color="primary">{selectedProduct?.id ? "Update" : "Create"} Product</Typography>
           <TextField
             value={name}
             label="Name"
@@ -119,54 +120,26 @@ export const CreateProductModal = (
             </Select>
           </FormControl>
           {selectedIngredients?.map(productIngredient => {
+            const ingredient = ingredients?.find(i => i.id === productIngredient.id);
+            if (!ingredient) return null;
             return (
-              <Stack key={productIngredient.id} direction={"row"} gap={1} flexWrap={"wrap"}>
-                <Typography sx={{ width: '100%' }}>{productIngredient.name}</Typography>
-                <TextField
-                  type="number"
-                  label="Min"
-                  value={productIngredient?.min}
-                  sx={{ flex: 1 }}
-                  onChange={(e) => {
-                    setSelectedIngredients(prev => {
-                      const newValue = { ...productIngredient };
-                      newValue.min = +e.target.value;
-                      return prev.map(item => {
-                        if (item.id === newValue.id) {
-                          return newValue;
-                        }
-                        return item;
-                      })
-                    })
-                  }}
-                />
-                <TextField
-                  type="number"
-                  label="Max"
-                  value={productIngredient?.max}
-                  sx={{ flex: 1 }}
-                  onChange={(e) => {
-                    setSelectedIngredients(prev => {
-                      const newValue = { ...productIngredient };
-                      newValue.max = +e.target.value;
-                      return prev.map(item => {
-                        if (item.id === newValue.id) {
-                          return newValue;
-                        }
-                        return item;
-                      })
-                    })
-                  }}
-                />
-                <TextField
-                  type="number"
-                  label="Default"
+              <Stack key={productIngredient.id} direction={"row"} justifyContent={"space-between"} gap={1}>
+                <Typography>{productIngredient.name}</Typography>
+                <Rating
                   value={productIngredient?.value}
-                  sx={{ flex: 1 }}
-                  onChange={(e) => {
+                  max={ingredient?.max}
+                  sx={{ '& .MuiRating-iconFilled': { color: "#803030" } }}
+                  icon={<IconCircleFilled color="#803030" />}
+                  emptyIcon={<IconCircle color="#801010" />}
+                  onChange={(e, value) => {
                     setSelectedIngredients(prev => {
                       const newValue = { ...productIngredient };
-                      newValue.value = +e.target.value;
+                      newValue.value = value === null ? 0 : value;
+                      if (newValue.value > ingredient.max) {
+                        newValue.value = ingredient.max;
+                      } else if (newValue.value < ingredient.min) {
+                        newValue.value = ingredient.min;
+                      }
                       return prev.map(item => {
                         if (item.id === newValue.id) {
                           return newValue;

@@ -24,6 +24,8 @@ export const CreateIngredientModal = (
     { open: boolean, handleClose: () => void, handleSave: () => void, selectedIngredient: null | Ingredient }) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [min, setMin] = useState<number | "">("");
+  const [max, setMax] = useState<number | "">("");
 
   useEffect(() => {
     if (open) {
@@ -39,12 +41,12 @@ export const CreateIngredientModal = (
   }, [open, selectedIngredient])
 
   const onSave = () => {
-    if (!name || !description) {
+    if (!name || !description || min === "" || max === "") {
       toast.error("All fields are required");
       return;
     }
     if (selectedIngredient) {
-      axios.put(`/api/ingredient/${selectedIngredient?.id}`, { name, description })
+      axios.put(`/api/ingredient/${selectedIngredient?.id}`, { name, description, min, max })
         .then(() => {
           toast.success("Successfully updated ingredient");
           handleClose();
@@ -52,7 +54,7 @@ export const CreateIngredientModal = (
         })
         .catch(error => toast.error(error?.message || "Failed to update ingredient"))
     } else {
-      axios.post(`/api/ingredient`, { name, description })
+      axios.post(`/api/ingredient`, { name, description, min, max })
         .then(() => {
           toast.success("Successfully created ingredient");
           handleClose();
@@ -82,6 +84,18 @@ export const CreateIngredientModal = (
             label="Description"
             placeholder="Description"
             onChange={(e) => setDescription(e.target.value)}
+          />
+          <TextField
+            value={min}
+            label="Min"
+            placeholder="Min"
+            onChange={({ target: { value } }) => setMin(isFinite(+value) ? +value : "")}
+          />
+          <TextField
+            value={max}
+            label="Max"
+            placeholder="Max"
+            onChange={({ target: { value } }) => setMax(isFinite(+value) ? +value : "")}
           />
           <Stack direction={'row'} gap={1} >
             <Button
