@@ -16,28 +16,32 @@ export const findAll = async () => {
   return ingredients;
 }
 
-export const create = async (name, description) => {
-  if (!name || !description) {
-    throw new Error("Name and description are required fields");
+export const create = async (name, description, min, max) => {
+  if (!name || !description || !isFinite(min) || min < 0 || !isFinite(max) || max <= min) {
+    throw new Error("Invalid data");
   }
   const ingredient = await Ingredient.create({
     name,
-    description
+    description,
+    min,
+    max
   })
 
   return ingredient;
 }
 
-export const update = async (id, name, description) => {
-  if (!name || !description || !id) {
-    throw new Error("Name and description are required fields");
+export const update = async (id, name, description, min, max) => {
+  if (!name || !description || !id || !isFinite(min) || min < 0 || !isFinite(max) || max <= min) {
+    throw new Error("Invalid data");
   }
   const ingredient = await Ingredient.findByIdAndUpdate(id, {
     name,
-    description
+    description,
+    min,
+    max
   })
 
-  return { ...ingredient, name, description };
+  return { ...ingredient, name, description, min, max };
 }
 
 export const deleteById = async (id) => {

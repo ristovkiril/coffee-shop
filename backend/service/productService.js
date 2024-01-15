@@ -65,18 +65,14 @@ const mapIngredients = async (ingredients) => {
     if (!ingredient.id) {
       throw new Error("Ingredient value is required");
     }
-    if (ingredient.min === undefined || ingredient.min < 0) {
-      throw new Error("Min value cant be below 0");
-    }
-    if (ingredient.value === undefined || ingredient.value < ingredient.min) {
-      throw new Error("Default value is required");
-    }
-    if (ingredient.value > ingredient.max) {
-      throw new Error("Default value must be below or equals max value");
-    }
     const dbIngredient = await Ingredient.findById(ingredient.id);
     ingredient.name = dbIngredient.name;
     ingredient.description = dbIngredient.description;
+
+    if (ingredient.value < dbIngredient.min || ingredient.value > dbIngredient.max) {
+      throw new Error(`Value must be between ${dbIngredient.min} and ${dbIngredient.max}`)
+    }
+
     mapped.push(ingredient);
   }
   return mapped;

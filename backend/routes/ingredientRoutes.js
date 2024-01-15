@@ -28,8 +28,8 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { name, description } = req.body;
-    const ingredient = await create(name, description);
+    const { name, description, min, max } = req.body;
+    const ingredient = await create(name, description, min, max);
 
     return res.status(200).json(ingredient);
   } catch (err) {
@@ -41,9 +41,9 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, description } = req.body;
+    const { name, description, min, max } = req.body;
 
-    const ingredient = await update(id, name, description);
+    const ingredient = await update(id, name, description, min, max);
 
     return res.status(200).json(ingredient);
   } catch (err) {
