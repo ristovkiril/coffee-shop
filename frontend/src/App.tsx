@@ -14,10 +14,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" index element={<HomePage />} />
         {
           isAuth ?
             <>
+              <Route path="/" index element={<HomePage />} />
               <Route path="/ingredients" index element={<IngredientsPage />} />
               <Route path="/default-coffee" index element={<DefaultProductsPage />} />
               <Route path="*" element={<Navigate to="/" />} />

@@ -19,7 +19,7 @@ export const DefaultProductsPage = () => {
   const fetchData = () => {
     axios.get("/api/product/default")
       .then(response => setProducts(response.data))
-      .catch(error => toast.error(error.message));
+      .catch(error => console.error(error.message));
   }
 
   const onSave = (product: Product) => {

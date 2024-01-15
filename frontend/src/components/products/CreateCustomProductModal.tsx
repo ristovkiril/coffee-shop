@@ -29,7 +29,7 @@ export const CreateCustomProductModal = (
   useEffect(() => {
     axios.get("/api/product/default")
       .then(response => setDefaultProducts(response.data))
-      .catch(error => toast.error(error.message));
+      .catch(error => console.error(error.message));
   }, [])
 
   const onSave = (product: null | Product) => {

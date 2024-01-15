@@ -9,7 +9,7 @@ export const ProductListItem = (
 ) => {
   return (
     <Grid
-      component={Stack} gap={1}
+      item component={Stack} gap={1}
       direction="column" sx={{ border: 1, borderColor: "divider", bgcolor: "#fff", borderRadius: 3, p: 2 }}
       alignContent={"stretch"}
       xs={12} sm={5.9} md={3.9} lg={2.9}
