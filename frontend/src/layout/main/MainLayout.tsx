@@ -56,30 +56,28 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
             <Button
               component={Link}
               to="/login"
+              variant="contained"
               sx={{
-                bgcolor: "#803030",
                 color: "#f1f1f1 !important",
                 borderRadius: 5,
                 textTransform: "none",
                 px: 2,
                 ml: "auto",
                 display: { xs: isAdmin ? "none" : "block", sm: "block" },
-                "&:hover": { bgcolor: "#801010", color: "#f1f1f1 !important" }
+                "&:hover": { color: "#f1f1f1 !important" }
               }}
             >
               Sign in
             </Button> :
             <Button
+              variant="outlined"
               onClick={onLogout}
               sx={{
-                bgcolor: "#803030",
-                color: "#f1f1f1 !important",
                 borderRadius: 5,
                 textTransform: "none",
                 px: 2,
                 ml: "auto",
                 display: { xs: isAdmin ? "none" : "block", sm: "block" },
-                "&:hover": { bgcolor: "#801010", color: "#f1f1f1 !important" }
               }}
             >
               Sign out
