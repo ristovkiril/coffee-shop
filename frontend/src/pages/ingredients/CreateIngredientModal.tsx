@@ -31,12 +31,19 @@ export const CreateIngredientModal = (
     if (open) {
       let newName = "";
       let newDesc = "";
+      let newMin = 0;
+      let newMax = 5;
       if (selectedIngredient) {
         newName = selectedIngredient.name;
         newDesc = selectedIngredient.description;
+        newMin = selectedIngredient.min;
+        newMax = selectedIngredient.max;
+
       }
       setName(newName);
       setDescription(newDesc);
+      setMin(newMin);
+      setMax(newMax);
     }
   }, [open, selectedIngredient])
 

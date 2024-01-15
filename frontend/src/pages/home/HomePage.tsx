@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminLayout } from "../../layout/admin/AdminLayout";
 import axios from "../../config/axios";
 import { toast } from "react-toastify";
-import { Box, Button, Grid, IconButton, Rating, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import moment from "moment";
-import { IconCircle, IconCircle0Filled, IconCircleFilled, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import useConfirm from "../../hooks/useConfirm";
+import { Box, Button } from "@mui/material";
+import { IconPlus } from "@tabler/icons-react";
 import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { CreateCustomProductModal } from "../../components/products/CreateCustomProductModal";
-// import { CreateIngredientModal } from "./CreateIngredientModal";
 
 export const HomePage = () => {
   const { isAuth } = useAuth();
@@ -19,27 +16,18 @@ export const HomePage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [ConfirmationDialog, confirm] = useConfirm(
-    "Delete action",
-    "Are you sure you want to delete this product?"
-  );
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, [isAuth])
 
   const fetchData = () => {
     axios.get("/api/product")
       .then(response => setProducts(response.data))
-      .catch(error => toast.error(error.message));
-  }
-
-  const onDelete = async (id: string) => {
-    const response = await confirm();
-    if (response) {
-      await axios.delete(`/api/product/${id}`);
-      fetchData();
-    }
+      .catch(error => {
+        setProducts([]);
+        // toast.error(error.message);
+      });
   }
 
   const onSave = (product: Product) => {
@@ -66,7 +54,6 @@ export const HomePage = () => {
 
   return (
     <AdminLayout>
-      {ConfirmationDialog}
       <CreateCustomProductModal
         open={openModal && selectedProduct === null}
         handleClose={() => setOpenModal(false)}

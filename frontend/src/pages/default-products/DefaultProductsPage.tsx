@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminLayout } from "../../layout/admin/AdminLayout";
 import axios from "../../config/axios";
 import { toast } from "react-toastify";
-import { Box, Button, Grid, IconButton, Rating, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import moment from "moment";
-import { IconCircle, IconCircle0Filled, IconCircleFilled, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import useConfirm from "../../hooks/useConfirm";
+import { Box, Button } from "@mui/material";
+import { IconPlus } from "@tabler/icons-react";
 import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
-// import { CreateIngredientModal } from "./CreateIngredientModal";
 
 export const DefaultProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [ConfirmationDialog, confirm] = useConfirm(
-    "Delete action",
-    "Are you sure you want to delete this product?"
-  );
 
   useEffect(() => {
     fetchData();
@@ -53,7 +46,6 @@ export const DefaultProductsPage = () => {
 
   return (
     <AdminLayout>
-      {ConfirmationDialog}
       <CreateProductModal
         open={openModal}
         handleClose={() => {

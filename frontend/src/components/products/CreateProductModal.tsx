@@ -1,8 +1,8 @@
-import { Button, Fade, FormControl, IconButton, InputLabel, MenuItem, Modal, Rating, Select, Stack, TextField, Typography } from "@mui/material"
+import { Button, Fade, FormControl, InputLabel, MenuItem, Modal, Select, Stack, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { IconCircle, IconCircleFilled, IconX } from "@tabler/icons-react";
 import { useAppContext } from "../../context/AppContext";
+import { IngredientRating } from "../ingredients/IngredientRating";
 
 
 const style = {
@@ -26,7 +26,7 @@ export const CreateProductModal = (
     { open: boolean, handleClose: () => void, handleSave: (product: Product) => void, selectedProduct: null | Product }) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number | "">(0);
   const [selectedIngredients, setSelectedIngredients] = useState<ProductIngredient[]>([]);
   const { ingredients } = useAppContext();
 
@@ -94,7 +94,7 @@ export const CreateProductModal = (
             label="Price"
             placeholder="Price"
             inputProps={{ min: 0 }}
-            onChange={(e) => setPrice(+e.target.value)}
+            onChange={({ target: { value } }) => setPrice(isFinite(+value) ? +value : "")}
           />
 
           <FormControl fullWidth>
@@ -108,7 +108,7 @@ export const CreateProductModal = (
                 const ingredient = ingredients?.find(i => i.id === e.target.value);
                 if (ingredient) {
                   setSelectedIngredients((prev: ProductIngredient[]) => {
-                    return [...prev, { id: ingredient?.id, name: ingredient?.name, description: ingredient?.description, value: 1, min: 0, max: 5 }]
+                    return [...prev, { ...ingredient, value: ingredient.min }]
                   })
                 }
               }}
@@ -119,42 +119,24 @@ export const CreateProductModal = (
               })}
             </Select>
           </FormControl>
-          {selectedIngredients?.map(productIngredient => {
-            const ingredient = ingredients?.find(i => i.id === productIngredient.id);
-            if (!ingredient) return null;
-            return (
-              <Stack key={productIngredient.id} direction={"row"} alignItems="center" gap={1}>
-                <IconButton onClick={() => removeIngredient(productIngredient.id)}>
-                  <IconX size={18} />
-                </IconButton>
-                <Typography sx={{ flex: 1 }} fontWeight={600}>{productIngredient.name}</Typography>
-                <Rating
-                  value={productIngredient?.value}
-                  max={ingredient?.max}
-                  sx={{ '& .MuiRating-iconFilled': { color: "#803030" } }}
-                  icon={<IconCircleFilled color="#803030" />}
-                  emptyIcon={<IconCircle color="#801010" />}
-                  onChange={(e, value) => {
-                    setSelectedIngredients(prev => {
-                      const newValue = { ...productIngredient };
-                      newValue.value = value === null ? 0 : value;
-                      if (newValue.value > ingredient.max) {
-                        newValue.value = ingredient.max;
-                      } else if (newValue.value < ingredient.min) {
-                        newValue.value = ingredient.min;
-                      }
-                      return prev.map(item => {
-                        if (item.id === newValue.id) {
-                          return newValue;
-                        }
-                        return item;
-                      })
-                    })
-                  }}
-                />
-              </Stack>
-            )
-          })}
+          {selectedIngredients?.map(productIngredient => (
+            <IngredientRating
+              key={productIngredient.id}
+              productIngredient={productIngredient}
+              readOnly={false}
+              onRemove={removeIngredient}
+              onChange={(newValue) => {
+                setSelectedIngredients(prev => {
+                  return prev.map(item => {
+                    if (item.id === newValue.id) {
+                      return newValue;
+                    }
+                    return item;
+                  })
+                })
+              }}
+            />
+          ))}
 
           <Stack direction={'row'} gap={1} >
             <Button

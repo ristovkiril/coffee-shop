@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminLayout } from "../../layout/admin/AdminLayout";
 import axios from "../../config/axios";
-import { toast } from "react-toastify";
-import { Box, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Button, IconButton, Rating, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import moment from "moment";
-import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconCircle, IconCircleFilled, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import useConfirm from "../../hooks/useConfirm";
 import { CreateIngredientModal } from "./CreateIngredientModal";
 import { useAppContext } from "../../context/AppContext";
@@ -63,6 +62,7 @@ export const IngredientsPage = () => {
               <TableCell>No.</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell>Min - Max</TableCell>
               <TableCell>Created</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -74,6 +74,13 @@ export const IngredientsPage = () => {
                   <TableCell>{index + 1}.</TableCell>
                   <TableCell>{ingredient.name}</TableCell>
                   <TableCell>{ingredient.description}</TableCell>
+                  <TableCell>
+                    <Rating max={ingredient.max} value={ingredient.min} readOnly
+                      sx={{ '& .MuiRating-iconFilled': { color: "#803030" } }}
+                      icon={<IconCircleFilled color="#803030" />}
+                      emptyIcon={<IconCircle color="#801010" />}
+                    />
+                  </TableCell>
                   <TableCell>{moment(ingredient.createdAt).format("HH:mm DD MMM YYYY")}</TableCell>
                   <TableCell>
                     <IconButton

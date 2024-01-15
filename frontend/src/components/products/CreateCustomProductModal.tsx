@@ -1,9 +1,9 @@
-import { Fade, Grid, IconButton, Modal, Rating, Stack, Typography } from "@mui/material"
+import { Fade, Grid, Modal, Stack, Typography } from "@mui/material"
 import axios from "../../config/axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { IconCircle, IconCircleFilled, IconPlus } from "@tabler/icons-react";
-import { useAppContext } from "../../context/AppContext";
+import { IconPlus } from "@tabler/icons-react";
+import { IngredientRating } from "../ingredients/IngredientRating";
 
 const style = {
   position: 'absolute',
@@ -25,7 +25,6 @@ export const CreateCustomProductModal = (
   { open, handleClose, handleSave }:
     { open: boolean, handleClose: () => void, handleSave: (product: Product) => void }) => {
   const [defaultProducts, setDefaultProducts] = useState<Product[]>([]);
-  const { ingredients } = useAppContext();
 
   useEffect(() => {
     axios.get("/api/product/default")
@@ -75,23 +74,13 @@ export const CreateCustomProductModal = (
                   >
                     <Typography variant="h6" fontWeight={600} color="primary">{product?.name}</Typography>
                     <Typography>{product?.description}</Typography>
-                    {product?.ingredients?.map(productIngredient => {
-                      const ingredient = ingredients?.find(i => i.id === productIngredient.id);
-                      if (!ingredient) return null;
-
-                      return (
-                        <Stack key={productIngredient.id} direction="row" alignItems="center" justifyContent={"space-between"}>
-                          <Typography>{productIngredient?.name}</Typography>
-                          <Rating
-                            value={productIngredient?.value}
-                            max={ingredient?.max}
-                            sx={{ '& .MuiRating-iconFilled': { color: "#803030" } }}
-                            icon={<IconCircleFilled color="#803030" />}
-                            emptyIcon={<IconCircle color="#801010" />}
-                          />
-                        </Stack>
-                      )
-                    })}
+                    {product?.ingredients?.map(productIngredient => (
+                      <IngredientRating
+                        key={productIngredient.id}
+                        productIngredient={productIngredient}
+                        readOnly={true}
+                      />
+                    ))}
                   </Grid>
                 )
               })
