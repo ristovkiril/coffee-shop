@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { AdminLayout } from "../../layout/admin/AdminLayout";
-import axios from "../../config/axios";
-import { toast } from "react-toastify";
 import { Box, Button } from "@mui/material";
 import { IconPlus } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
+import axios from "../../config/axios";
+import { AdminLayout } from "../../layout/admin/AdminLayout";
 
 export const DefaultProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);

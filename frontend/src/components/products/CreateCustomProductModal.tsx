@@ -1,8 +1,7 @@
-import { Fade, Grid, Modal, Stack, Typography } from "@mui/material"
-import axios from "../../config/axios";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { Fade, Grid, Modal, Stack, Typography } from "@mui/material";
 import { IconPlus } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import axios from "../../config/axios";
 import { IngredientRating } from "../ingredients/IngredientRating";
 
 const style = {
