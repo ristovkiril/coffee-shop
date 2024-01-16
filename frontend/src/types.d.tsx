@@ -33,7 +33,7 @@ type Order = {
   id: string,
   displayName: string,
   ipAddress: string,
-  userId: string | null,
+  userId: string,
   total: number,
   products: Product[]
 }
