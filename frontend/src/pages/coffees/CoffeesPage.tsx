@@ -2,7 +2,6 @@ import { Box, Button } from "@mui/material";
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { CreateCustomProductModal } from "../../components/products/CreateCustomProductModal";
 import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
@@ -29,28 +28,6 @@ export const CoffeesPage = () => {
       });
   }
 
-  const onSave = (product: Product) => {
-    if (selectedProduct?.id) {
-      axios.put(`/api/product/${selectedProduct?.id}`, { ...product })
-        .then(() => {
-          toast.success("Successfully updated product");
-          setOpenModal(false);
-          setSelectedProduct(null);
-          fetchData();
-        })
-        .catch(error => toast.error(error?.message || "Failed to update product"))
-    } else {
-      axios.post(`/api/product`, { ...product })
-        .then(() => {
-          toast.success("Successfully created product");
-          setOpenModal(false);
-          setSelectedProduct(null);
-          fetchData();
-        })
-        .catch(error => toast.error(error?.message || "Failed to create product"))
-    }
-  }
-
   return (
     <AdminLayout>
       <CreateCustomProductModal
@@ -67,7 +44,7 @@ export const CoffeesPage = () => {
           setOpenModal(false);
           setSelectedProduct(null);
         }}
-        handleSave={onSave}
+        onRefresh={() => fetchData()}
         selectedProduct={selectedProduct}
       />
 

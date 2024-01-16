@@ -10,6 +10,7 @@ import "punycode"
 import authRoutes from "./src/routes/authRoutes.js";
 import ingredientRoutes from "./src/routes/ingredientRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
+import ordersRoutes from "./src/routes/ordersRoutes.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(verifyTokenMiddleware)
 app.use("/api/user", authRoutes)
 app.use("/api/ingredient", ingredientRoutes)
 app.use("/api/product", authenticateUser, productRoutes)
+app.use("/api/order", ordersRoutes)
 
 app.get(`/`, (req, res) => {
 

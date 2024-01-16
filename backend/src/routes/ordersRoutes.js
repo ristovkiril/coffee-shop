@@ -1,6 +1,5 @@
 import express from "express";
 import { create, deleteById, getOrder, getUserOrders } from "../service/orderService.js";
-import adminMiddleware from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
 
@@ -27,7 +26,8 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const order = await create(req.body, req.user, ipAddress);
+    const { displayName, products } = req.body;
+    const order = await create(displayName, products, req.user, req.ipAddress);
 
     return res.status(200).json(order);
   } catch (err) {

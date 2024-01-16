@@ -1,5 +1,5 @@
 import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
-import { IconPencil, IconPlus, IconShoppingCart, IconTrash } from "@tabler/icons-react";
+import { IconPencil, IconShoppingCart, IconTrash } from "@tabler/icons-react";
 import { IngredientRating } from "../ingredients/IngredientRating";
 import { useAuth } from "../../context/AuthContext";
 import { useAppContext } from "../../context/AppContext";

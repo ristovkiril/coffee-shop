@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useAppContext } from "../../context/AppContext";
 import { IngredientRating } from "../ingredients/IngredientRating";
+import axios from "../../config/axios";
 
 
 const style = {
@@ -22,8 +23,8 @@ const style = {
 };
 
 export const CreateProductModal = (
-  { open, handleClose, handleSave, selectedProduct }:
-    { open: boolean, handleClose: () => void, handleSave: (product: Product) => void, selectedProduct: null | Product }) => {
+  { open, handleClose, onRefresh, selectedProduct }:
+    { open: boolean, handleClose: () => void, onRefresh: () => void, selectedProduct: null | Product }) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number | "">(0);
@@ -49,13 +50,30 @@ export const CreateProductModal = (
     }
   }, [open, selectedProduct])
 
+
   const onSave = () => {
     if (!name || !description || !price || selectedIngredients?.length === 0) {
       toast.error("All fields are required");
       return;
     }
-    handleSave({ id: null, owner: null, name, description, price, ingredients: selectedIngredients })
-
+    const product = { id: null, owner: null, name, description, price, ingredients: selectedIngredients };
+    if (selectedProduct?.id) {
+      axios.put(`/api/product/${selectedProduct?.id}`, { ...product })
+        .then(() => {
+          toast.success("Successfully updated product");
+          handleClose()
+          onRefresh();
+        })
+        .catch(error => toast.error(error?.message || "Failed to update product"))
+    } else {
+      axios.post(`/api/product`, { ...product })
+        .then(() => {
+          toast.success("Successfully created product");
+          handleClose()
+          onRefresh();
+        })
+        .catch(error => toast.error(error?.message || "Failed to create product"))
+    }
   }
 
   const removeIngredient = (id: string) => {

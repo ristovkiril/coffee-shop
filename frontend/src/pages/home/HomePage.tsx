@@ -1,21 +1,13 @@
-import { Box, Button } from "@mui/material";
-import { IconPlus } from "@tabler/icons-react";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { CreateCustomProductModal } from "../../components/products/CreateCustomProductModal";
-import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
 import axios from "../../config/axios";
 import { useAuth } from "../../context/AuthContext";
-import { AdminLayout } from "../../layout/admin/AdminLayout";
 import { MainLayout } from "../../layout/main/MainLayout";
-import { useAppContext } from "../../context/AppContext";
+import { CreateProductModal } from "../../components/products/CreateProductModal";
 
 export const HomePage = () => {
   const { isAuth } = useAuth();
-  const { } = useAppContext();
-  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -53,6 +45,15 @@ export const HomePage = () => {
 
   return (
     <MainLayout>
+      <CreateProductModal
+        open={openModal && !!selectedProduct}
+        handleClose={() => {
+          setOpenModal(false);
+          setSelectedProduct(null);
+        }}
+        selectedProduct={selectedProduct}
+        onRefresh={() => fetchData()}
+      />
       <Box sx={{ my: 3 }}>
         <ProductsList
           products={products}

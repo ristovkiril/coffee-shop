@@ -1,5 +1,5 @@
-import { Order } from "../models/Order";
-import { Product } from "../models/Product";
+import { Order } from "../models/Order.js";
+import { Product } from "../models/Product.js";
 
 
 export const getUserOrders = async (user, ipAddress) => {
@@ -28,18 +28,23 @@ export const getOrder = async (id, user) => {
   return order;
 }
 
-export const create = async (order, user, ipAddress) => {
-  const { displayName, products } = order;
+export const create = async (displayName, products, user, ipAddress) => {
+  console.log("CREATE")
+  console.log(displayName, products);
+
   if (!displayName || !products || !products?.length) {
     throw Error("All fields are required");
   }
   const customProducts = [];
   let total = 0;
+  console.log(products);
   for (const orderProduct of products) {
     if (!orderProduct.id) {
       continue;
     }
+    console.log("Product list", orderProduct)
     const product = await Product.findById(orderProduct.id);
+    console.log(product.id)
     if (product) {
       total += product.price;
       let ingredients = orderProduct?.ingredients;
