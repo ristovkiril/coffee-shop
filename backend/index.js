@@ -21,7 +21,7 @@ app.use(verifyTokenMiddleware)
 
 app.use("/api/user", authRoutes)
 app.use("/api/ingredient", ingredientRoutes)
-app.use("/api/product", authenticateUser, productRoutes)
+app.use("/api/product", productRoutes)
 app.use("/api/order", ordersRoutes)
 
 app.get(`/`, (req, res) => {

@@ -14,14 +14,19 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openCartDrawer, setOpenCartDrawer] = useState(false);
 
-  const navButtons = navItems?.map(item => <Button
-    key={item.pathname}
-    component={NavLink}
-    to={item.pathname}
-    sx={{ borderBottom: 2, borderRadius: 0, borderColor: "transparent" }}
-  >
-    {item.label}
-  </Button>)
+  const navButtons = navItems?.map(item => {
+    if (item.isAuth && currentUser !== null) return null;
+    if (item.isAdmin && currentUser?.role !== "admin") return null;
+
+    return (<Button
+      key={item.pathname}
+      component={NavLink}
+      to={item.pathname}
+      sx={{ borderBottom: 2, borderRadius: 0, borderColor: "transparent" }}
+    >
+      {item.label}
+    </Button>)
+  })
 
   const isAdmin = currentUser?.role === "admin";
 
@@ -43,12 +48,13 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
         >
           CoffeLab
         </Typography>
+        <Stack direction="row" gap={1} sx={{ display: { xs: 'none', sm: 'flex' } }}>
+          {navButtons}
+        </Stack>
         {
           isAdmin &&
           <>
-            <Stack direction="row" gap={1} sx={{ display: { xs: 'none', sm: 'flex' } }}>
-              {navButtons}
-            </Stack>
+
             <IconButton
               sx={{ ml: "auto", display: { xs: 'block', sm: 'none' } }}
               onClick={() => setOpenDrawer(true)}

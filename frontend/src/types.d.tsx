@@ -16,7 +16,6 @@ type Ingredient = {
 
 type Product = {
   id: null | string,
-  owner: null | string,
   name: string,
   description: string,
   price: number,
@@ -28,4 +27,13 @@ type ProductIngredient = {
   name: string,
   description: string,
   value: number,
+}
+
+type Order = {
+  id: string,
+  displayName: string,
+  ipAddress: string,
+  userId: string | null,
+  total: number,
+  products: Product[]
 }
