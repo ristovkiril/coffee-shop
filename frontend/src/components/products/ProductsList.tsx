@@ -5,8 +5,8 @@ import { ProductListItem } from "./ProductListItem";
 
 
 export const ProductsList = (
-  { products, onSelectProduct, onRefresh }:
-    { products: Product[], onSelectProduct: (product: Product) => void, onRefresh: () => void }) => {
+  { products, hideCartButtons = true, onUpdate, onSelectProduct, onRefresh }:
+    { products: Product[], hideCartButtons: boolean, onUpdate?: (product: Product, productIngredient: ProductIngredient) => void | undefined, onSelectProduct: (product: Product) => void, onRefresh: () => void }) => {
   const [ConfirmationDialog, confirm] = useConfirm(
     "Delete action",
     "Are you sure you want to delete this product?"
@@ -19,6 +19,7 @@ export const ProductsList = (
       onRefresh();
     }
   }
+
   return (
     <Grid container sx={{ maxHeight: "100%", mt: 2 }} gap={1} justifyContent={"center"}>
       {ConfirmationDialog}
@@ -30,6 +31,8 @@ export const ProductsList = (
           product={product}
           onDelete={onDelete}
           onEditProduct={(product) => onSelectProduct(product)}
+          hideCartButtons={hideCartButtons}
+          onUpdate={onUpdate}
         />
       ))}
     </Grid>

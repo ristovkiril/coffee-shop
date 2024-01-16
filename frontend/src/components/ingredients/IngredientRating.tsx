@@ -5,15 +5,15 @@ import { toast } from "react-toastify";
 
 
 export const IngredientRating = (
-  { productIngredient, readOnly, onChange, onRemove }:
-    { productIngredient: ProductIngredient, readOnly: boolean, onChange?: (productIngredient: ProductIngredient) => void | undefined, onRemove?: (id: string) => void | undefined }) => {
+  { productIngredient, readOnly, removeIngredient, onChange, onRemove }:
+    { productIngredient: ProductIngredient, readOnly: boolean, removeIngredient: boolean, onChange?: (productIngredient: ProductIngredient) => void | undefined, onRemove?: (id: string) => void | undefined }) => {
   const { ingredients } = useAppContext();
   const ingredient = ingredients?.find(i => i.id === productIngredient.id);
   if (!ingredient) return null;
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {
-        !readOnly &&
+        !readOnly && removeIngredient &&
         <IconButton size="small" onClick={() => {
           if (onRemove) {
             onRemove(productIngredient.id)

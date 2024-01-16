@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/login/LoginPage';
 import { RegisterPage } from './pages/register/RegisterPage';
 import { IngredientsPage } from './pages/ingredients/IngredientsPage';
-import { DefaultProductsPage } from './pages/default-products/DefaultProductsPage';
+import { CoffeesPage } from './pages/coffees/CoffeesPage';
 import { HomePage } from './pages/home/HomePage';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
             <>
               <Route path="/" index element={<HomePage />} />
               <Route path="/ingredients" index element={<IngredientsPage />} />
-              <Route path="/default-coffee" index element={<DefaultProductsPage />} />
+              <Route path="/coffees" index element={<CoffeesPage />} />
               <Route path="*" element={<Navigate to="/" />} />
             </> :
             <>

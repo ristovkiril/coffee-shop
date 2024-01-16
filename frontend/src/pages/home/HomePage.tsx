@@ -9,9 +9,12 @@ import { ProductsList } from "../../components/products/ProductsList";
 import axios from "../../config/axios";
 import { useAuth } from "../../context/AuthContext";
 import { AdminLayout } from "../../layout/admin/AdminLayout";
+import { MainLayout } from "../../layout/main/MainLayout";
+import { useAppContext } from "../../context/AppContext";
 
 export const HomePage = () => {
   const { isAuth } = useAuth();
+  const { } = useAppContext();
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
@@ -29,65 +32,28 @@ export const HomePage = () => {
       });
   }
 
-  const onSave = (product: Product) => {
-    if (selectedProduct?.id) {
-      axios.put(`/api/product/${selectedProduct?.id}`, { ...product })
-        .then(() => {
-          toast.success("Successfully updated product");
-          setOpenModal(false);
-          setSelectedProduct(null);
-          fetchData();
-        })
-        .catch(error => toast.error(error?.message || "Failed to update product"))
-    } else {
-      axios.post(`/api/product`, { ...product })
-        .then(() => {
-          toast.success("Successfully created product");
-          setOpenModal(false);
-          setSelectedProduct(null);
-          fetchData();
-        })
-        .catch(error => toast.error(error?.message || "Failed to create product"))
-    }
+  const onUpdateProduct = (product: Product, productIngredient: ProductIngredient) => {
+    setProducts(prevProducts => {
+      return prevProducts.map(prod => {
+        if (product?.id === prod.id) {
+          // change ingredient
+          const newProduct = { ...prod }
+          newProduct.ingredients = newProduct.ingredients.map(ingredient => {
+            if (ingredient.id === productIngredient?.id) {
+              return productIngredient;
+            }
+            return ingredient;
+          })
+          return newProduct;
+        }
+        return prod;
+      })
+    })
   }
 
   return (
-    <AdminLayout>
-      <CreateCustomProductModal
-        open={openModal && selectedProduct === null}
-        handleClose={() => setOpenModal(false)}
-        handleSave={(product: Product) => {
-          setSelectedProduct({ ...product });
-          setOpenModal(true);
-        }}
-      />
-      <CreateProductModal
-        open={openModal && !!selectedProduct}
-        handleClose={() => {
-          setOpenModal(false);
-          setSelectedProduct(null);
-        }}
-        handleSave={onSave}
-        selectedProduct={selectedProduct}
-      />
-
-      <Box sx={{ p: 2, borderRadius: 3, my: 3 }}>
-        <Button
-          variant="contained"
-          color={"primary"}
-          startIcon={<IconPlus size={18} />}
-          sx={{ textTransform: "none" }}
-          onClick={() => {
-            if (!isAuth) {
-              navigate("/login");
-              return;
-            }
-            setOpenModal(true);
-            setSelectedProduct(null);
-          }}
-        >
-          Add Favorite Coffee
-        </Button>
+    <MainLayout>
+      <Box sx={{ my: 3 }}>
         <ProductsList
           products={products}
           onSelectProduct={(product: Product) => {
@@ -95,9 +61,11 @@ export const HomePage = () => {
             setOpenModal(true);
           }}
           onRefresh={() => fetchData()}
+          hideCartButtons={false}
+          onUpdate={onUpdateProduct}
         />
       </Box>
 
-    </AdminLayout>
+    </MainLayout>
   )
 }

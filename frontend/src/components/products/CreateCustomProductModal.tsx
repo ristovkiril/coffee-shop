@@ -78,6 +78,7 @@ export const CreateCustomProductModal = (
                         key={productIngredient.id}
                         productIngredient={productIngredient}
                         readOnly={true}
+                        removeIngredient={true}
                       />
                     ))}
                   </Grid>

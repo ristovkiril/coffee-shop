@@ -1,25 +1,32 @@
 import { Box, Button } from "@mui/material";
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { CreateCustomProductModal } from "../../components/products/CreateCustomProductModal";
 import { CreateProductModal } from "../../components/products/CreateProductModal";
 import { ProductsList } from "../../components/products/ProductsList";
 import axios from "../../config/axios";
+import { useAuth } from "../../context/AuthContext";
 import { AdminLayout } from "../../layout/admin/AdminLayout";
 
-export const DefaultProductsPage = () => {
+export const CoffeesPage = () => {
+  const { isAuth } = useAuth();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, [isAuth])
 
   const fetchData = () => {
-    axios.get("/api/product/default")
+    axios.get("/api/product")
       .then(response => setProducts(response.data))
-      .catch(error => console.error(error.message));
+      .catch(() => {
+        setProducts([]);
+      });
   }
 
   const onSave = (product: Product) => {
@@ -33,7 +40,7 @@ export const DefaultProductsPage = () => {
         })
         .catch(error => toast.error(error?.message || "Failed to update product"))
     } else {
-      axios.post(`/api/product/default`, { ...product })
+      axios.post(`/api/product`, { ...product })
         .then(() => {
           toast.success("Successfully created product");
           setOpenModal(false);
@@ -46,8 +53,16 @@ export const DefaultProductsPage = () => {
 
   return (
     <AdminLayout>
+      <CreateCustomProductModal
+        open={openModal && selectedProduct === null}
+        handleClose={() => setOpenModal(false)}
+        handleSave={(product: Product) => {
+          setSelectedProduct({ ...product });
+          setOpenModal(true);
+        }}
+      />
       <CreateProductModal
-        open={openModal}
+        open={openModal && !!selectedProduct}
         handleClose={() => {
           setOpenModal(false);
           setSelectedProduct(null);
@@ -63,11 +78,15 @@ export const DefaultProductsPage = () => {
           startIcon={<IconPlus size={18} />}
           sx={{ textTransform: "none" }}
           onClick={() => {
+            if (!isAuth) {
+              navigate("/login");
+              return;
+            }
             setOpenModal(true);
             setSelectedProduct(null);
           }}
         >
-          Add Product
+          Create coffee
         </Button>
         <ProductsList
           products={products}
@@ -76,6 +95,7 @@ export const DefaultProductsPage = () => {
             setOpenModal(true);
           }}
           onRefresh={() => fetchData()}
+          hideCartButtons={true}
         />
       </Box>
 

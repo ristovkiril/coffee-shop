@@ -125,6 +125,7 @@ export const CreateProductModal = (
               productIngredient={productIngredient}
               readOnly={false}
               onRemove={removeIngredient}
+              removeIngredient={true}
               onChange={(newValue) => {
                 setSelectedIngredients(prev => {
                   return prev.map(item => {

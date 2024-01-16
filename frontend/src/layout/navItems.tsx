@@ -8,7 +8,7 @@ export const navItems = [
     label: "Ingredients",
   },
   {
-    pathname: "/default-coffee",
-    label: "Default Coffees",
+    pathname: "/coffees",
+    label: "Coffees",
   },
 ]
