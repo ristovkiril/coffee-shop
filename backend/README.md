@@ -1,4 +1,7 @@
 # Coffee Shop Backend
+**Github** https://github.com/ristovkiril/coffee-shop
+<br/>
+**Demo app** https://coffee-shop-46lz.vercel.app/ 
 
 Welcome to the Coffee Shop Backend! This backend application provides the server-side functionalities for the Coffee Shop Application, including user authentication, ingredient management, and product operations.
 

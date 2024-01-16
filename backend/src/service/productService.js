@@ -9,44 +9,34 @@ export const findById = async (id) => {
   return product;
 }
 
-export const findAll = async (owner) => {
-  const products = await Product.find({ owner: owner });
+export const findAll = async () => {
+  const products = await Product.find({});
   if (!products) {
     throw new Error("Product not found");
   }
   return products;
 }
 
-export const create = async (name, description, price, ingredients, user) => {
+export const create = async (name, description, price, ingredients) => {
   if (!name || !description || !price || !ingredients || ingredients.length === 0) {
     throw new Error("Name, description, price and ingredients are required fields");
   }
-
   const mappedIngredients = await mapIngredients(ingredients);
 
   const product = await Product.create({
     name,
     description,
     price,
-    owner: user?.id || null,
     ingredients: mappedIngredients
   })
 
   return product;
 }
 
-export const update = async (id, name, description, price, ingredients, user) => {
+export const update = async (id, name, description, price, ingredients) => {
   if (!id || !name || !description || !price || !ingredients || ingredients.length === 0) {
     throw new Error("Name, description, price and ingredients are required fields");
   }
-  const productDb = await Product.findById(id);
-  if (productDb.owner === null && user.role !== "admin") {
-    throw new Error("Forbidden - You do not have the necessary permissions");
-  }
-  if (productDb.owner !== null && productDb.owner.toString() !== user.id) {
-    throw new Error("Forbidden - You do not have the necessary permissions");
-  }
-
   const mappedIngredients = await mapIngredients(ingredients);
 
   const product = await Product.findByIdAndUpdate(id, {
@@ -59,19 +49,9 @@ export const update = async (id, name, description, price, ingredients, user) =>
   return { ...product, name, description, price, ingredients };
 }
 
-export const deleteById = async (id, user) => {
+export const deleteById = async (id) => {
   if (!id) {
     throw new Error("Id is required");
-  }
-  const productDb = await Product.findById(id);
-  if (!productDb) {
-    throw new Error("Product not found");
-  }
-  if (productDb.owner === null && user.role !== "admin") {
-    throw new Error("Forbidden - You do not have the necessary permissions");
-  }
-  if (productDb.owner !== null && productDb.owner.toString() !== user.id) {
-    throw new Error("Forbidden - You do not have the necessary permissions");
   }
   await Product.findByIdAndDelete(id);
 }
