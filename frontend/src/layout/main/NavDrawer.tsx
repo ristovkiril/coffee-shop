@@ -2,11 +2,34 @@ import { Divider, Drawer, IconButton, List, ListItemButton, Stack, Typography } 
 import { IconMenu2 } from "@tabler/icons-react";
 import { navItems } from "../navItems";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useMemo } from "react";
 
 export const NavDrawer = (
   { open, handleClose, onLogout }:
     { open: boolean, handleClose: () => void, onLogout: () => void }
 ) => {
+  const { currentUser } = useAuth();
+
+
+  const navButtons = useMemo(() => {
+    return navItems?.map(item => {
+      console.log(item, currentUser);
+      console.log(item.isAuth && currentUser !== null)
+      console.log(item.isAdmin && currentUser?.role !== "admin")
+      if (item.isAuth && currentUser === null) return null;
+      if (item.isAdmin && currentUser?.role !== "admin") return null;
+
+      return (<ListItemButton
+        key={item.pathname}
+        component={NavLink}
+        to={item.pathname}
+        sx={{ borderBottom: 0, fontWeight: 400, borderRadius: 0, borderColor: "transparent" }}
+      >
+        {item.label}
+      </ListItemButton>)
+    })
+  }, [currentUser])
 
   return (
     <>
@@ -31,16 +54,7 @@ export const NavDrawer = (
           </IconButton>
         </Stack>
         <List>
-          {navItems?.map(item => {
-            return <ListItemButton
-              key={item.pathname}
-              component={NavLink}
-              to={item.pathname}
-              sx={{ borderBottom: 0, fontWeight: 400, borderRadius: 0, borderColor: "transparent" }}
-            >
-              {item.label}
-            </ListItemButton>
-          })}
+          {navButtons}
           <Divider sx={{ my: 3 }} />
           <ListItemButton
             onClick={onLogout}

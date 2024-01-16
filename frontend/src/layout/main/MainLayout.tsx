@@ -1,5 +1,5 @@
 import { Badge, Button, Container, IconButton, Stack, Toolbar, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { IconMenu2, IconShoppingCart } from "@tabler/icons-react";
@@ -14,19 +14,24 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openCartDrawer, setOpenCartDrawer] = useState(false);
 
-  const navButtons = navItems?.map(item => {
-    if (item.isAuth && currentUser !== null) return null;
-    if (item.isAdmin && currentUser?.role !== "admin") return null;
+  const navButtons = useMemo(() => {
+    return navItems?.map(item => {
+      console.log(item, currentUser);
+      console.log(item.isAuth && currentUser !== null)
+      console.log(item.isAdmin && currentUser?.role !== "admin")
+      if (item.isAuth && currentUser === null) return null;
+      if (item.isAdmin && currentUser?.role !== "admin") return null;
 
-    return (<Button
-      key={item.pathname}
-      component={NavLink}
-      to={item.pathname}
-      sx={{ borderBottom: 2, borderRadius: 0, borderColor: "transparent" }}
-    >
-      {item.label}
-    </Button>)
-  })
+      return (<Button
+        key={item.pathname}
+        component={NavLink}
+        to={item.pathname}
+        sx={{ borderBottom: 2, borderRadius: 0, borderColor: "transparent" }}
+      >
+        {item.label}
+      </Button>)
+    })
+  }, [currentUser])
 
   const isAdmin = currentUser?.role === "admin";
 
@@ -48,23 +53,10 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
         >
           CoffeLab
         </Typography>
-        <Stack direction="row" gap={1} sx={{ display: { xs: 'none', sm: 'flex' } }}>
+        <Stack direction="row" gap={1} sx={{ display: { xs: 'none', md: 'flex' } }}>
           {navButtons}
         </Stack>
-        {
-          isAdmin &&
-          <>
-
-            <IconButton
-              sx={{ ml: "auto", display: { xs: 'block', sm: 'none' } }}
-              onClick={() => setOpenDrawer(true)}
-            >
-              <IconMenu2 />
-            </IconButton>
-          </>
-        }
-
-        <Stack direction="row" gap={2} alignItems={"center"} sx={{ ml: "auto", display: { xs: isAdmin ? "none" : "block", sm: "block" } }}>
+        <Stack direction="row" gap={2} alignItems={"center"} sx={{ ml: "auto" }}>
           <IconButton color="primary" sx={{ mx: 1 }} onClick={() => setOpenCartDrawer(true)}>
             <Badge color="primary" badgeContent={cart.length} variant="standard" >
               <IconShoppingCart />
@@ -81,6 +73,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
                   borderRadius: 5,
                   textTransform: "none",
                   px: 2,
+                  display: { xs: isAdmin ? "none" : "block", md: "block" },
                   "&:hover": { color: "#f1f1f1 !important" }
                 }}
               >
@@ -92,12 +85,19 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 sx={{
                   borderRadius: 5,
                   textTransform: "none",
+                  display: { xs: isAdmin ? "none" : "block", md: "block" },
                   px: 2,
                 }}
               >
                 Sign out
               </Button>
           }
+          <IconButton
+            sx={{ ml: "auto", display: { xs: 'block', md: 'none' } }}
+            onClick={() => setOpenDrawer(true)}
+          >
+            <IconMenu2 />
+          </IconButton>
         </Stack>
 
 
