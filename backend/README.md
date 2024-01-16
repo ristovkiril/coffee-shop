@@ -3,7 +3,7 @@
 <br/>
 **Demo app** https://coffee-shop-46lz.vercel.app/ 
 <br/>
-** Admin User** admin@yahoo.com p@ssw0rd
+**Admin User** admin@yahoo.com p@ssw0rd
 
 Welcome to the Coffee Shop Backend! This backend application provides the server-side functionalities for the Coffee Shop Application, including user authentication, ingredient management, and product operations.
 
