@@ -56,7 +56,7 @@ export const CreateProductModal = (
       toast.error("All fields are required");
       return;
     }
-    const product = { id: null, owner: null, name, description, price, ingredients: selectedIngredients };
+    const product = { id: null, name, description, price, ingredients: selectedIngredients };
     if (selectedProduct?.id) {
       axios.put(`/api/product/${selectedProduct?.id}`, { ...product })
         .then(() => {

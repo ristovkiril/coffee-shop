@@ -32,7 +32,7 @@ export const CreateCustomProductModal = (
   }, [])
 
   const onSave = (product: null | Product) => {
-    let newProduct: Product = { id: null, name: "", description: "", owner: null, price: 0, ingredients: [] };
+    let newProduct: Product = { id: null, name: "", description: "", price: 0, ingredients: [] };
     if (product) {
       newProduct = { ...product, id: null }
     }
