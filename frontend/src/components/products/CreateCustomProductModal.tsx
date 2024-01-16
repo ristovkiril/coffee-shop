@@ -27,8 +27,8 @@ export const CreateCustomProductModal = (
 
   useEffect(() => {
     axios.get("/api/product/default")
-      .then(response => setDefaultProducts(response.data))
-      .catch(error => console.error(error.message));
+      .then((response: any) => setDefaultProducts(response.data))
+      .catch((error: any) => console.error(error.message));
   }, [])
 
   const onSave = (product: null | Product) => {

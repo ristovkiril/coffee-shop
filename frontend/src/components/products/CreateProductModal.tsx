@@ -64,7 +64,7 @@ export const CreateProductModal = (
           handleClose()
           onRefresh();
         })
-        .catch(error => toast.error(error?.message || "Failed to update product"))
+        .catch((error: any) => toast.error(error?.message || "Failed to update product"))
     } else {
       axios.post(`/api/product`, { ...product })
         .then(() => {
@@ -72,7 +72,7 @@ export const CreateProductModal = (
           handleClose()
           onRefresh();
         })
-        .catch(error => toast.error(error?.message || "Failed to create product"))
+        .catch((error: any) => toast.error(error?.message || "Failed to create product"))
     }
   }
 

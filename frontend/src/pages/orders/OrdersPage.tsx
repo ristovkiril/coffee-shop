@@ -14,7 +14,7 @@ export const OrdersPage = () => {
 
   const fetchData = () => {
     axios.get("/api/order")
-      .then(response => setOrders(response.data))
+      .then((response: any) => setOrders(response.data || []))
       .catch(() => {
         setOrders([]);
       });
@@ -39,7 +39,7 @@ export const OrdersPage = () => {
               return (
                 <TableRow key={order.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{order.displayName} - {order?.userId}</TableCell>
+                  <TableCell>{order.displayName}</TableCell>
                   <TableCell>
                     <ul>
                       {order?.products?.map(product => {

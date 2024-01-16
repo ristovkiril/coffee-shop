@@ -4,13 +4,17 @@ import { Product } from "../models/Product.js";
 
 export const getUserOrders = async (user, ipAddress) => {
   let orders = [];
-
   if (user && user.role === "admin") {
-    return await Order.find({});
+    console.log("ADMIN ORDERS")
+    orders = await Order.find({});
   } else if (user?.id) {
-    return await Order.find({ userId: user.id });
+    console.log("User orders", user?.id)
+    orders = await Order.find({ userId: user.id });
+  } else {
+    console.log("IP address orders", ipAddress)
+    orders = await Order.find({ ipAddress: ipAddress, userId: null });
   }
-  return await Order.find({ ipAddress: ipAddress });
+  return orders;
 }
 
 export const getOrder = async (id, user) => {
